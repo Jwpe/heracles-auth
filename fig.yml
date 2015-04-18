@@ -1,0 +1,19 @@
+db:
+    image: postgres
+    environment:
+        - POSTGRES_PASSWORD=password
+        - POSTGRES_USER=heracles
+app:
+    build: .
+    volumes:
+        - .:/var/www/heracles-auth
+    links:
+        - db
+    ports:
+        - "8001:8000"
+    environment:
+        - PRIMARY_DATABASE_URL=postgresql://heracles:password@db:5432/heracles
+        - SECRET_KEY=bla
+        - DEVELOPMENT=True
+    command: uwsgi --ini uwsgi.ini
+
